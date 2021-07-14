@@ -1,11 +1,15 @@
 const { BrowserWindow, app } = require('electron');
 
+let mainWindow;
+
 const createMainWindows = () => {
-    const mainWindows = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         title: 'ImageShrink',
         width: 500,
         height: 600,
     });
+
+    mainWindow.loadFile('./app/index.html');
 }
 
 app.on('ready', createMainWindows);
