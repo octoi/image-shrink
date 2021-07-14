@@ -11,7 +11,8 @@
   "author": "fadhilsaheer",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^13.1.6"
+    "electron": "^13.1.6",
+    "electron-packager": "^15.2.0"
   },
   "dependencies": {
     "imagemin": "^7.0.1",
