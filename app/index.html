@@ -75,6 +75,12 @@
                 html: `Image resized to ${slider.value}% quality`
             });
         })
+
+        ipcRenderer.on('image:failed', () => {
+            M.toast({
+                html: `Failed to compress image`,
+            });
+        })
     </script>
 
 </body>
