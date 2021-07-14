@@ -17,6 +17,7 @@ const createMainWindow = () => {
         backgroundColor: 'white',
         webPreferences: {
             nodeIntegration: true,
+            contextIsolation: false,
         }
     });
 
