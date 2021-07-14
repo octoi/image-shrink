@@ -1,8 +1,9 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, globalShortcut } = require('electron');
 
 process.env.NODE_ENV = 'development';
 
 const isDev = process.env.NODE_ENV == 'development';
+const isMac = process.platform == 'darwin';
 
 let mainWindow;
 
@@ -19,33 +20,35 @@ const createMainWindow = () => {
 }
 
 const menu = [
-    {
-        label: 'About',
-        role: 'appMenu'
-    },
-    {
-        label: 'File',
-        submenu: [
-            {
-                label: 'quit',
-                click: () => app.quit(),
-            }
-        ]
-    },
+    ...(!isDev ? [] : [
+        {
+            label: 'Developer',
+            submenu: [
+                { role: 'reload' },
+                { role: 'forcereload' },
+                { type: 'separator' },
+                { role: 'toggledevtools' },
+            ],
+        },
+    ])
 ]
 
 app.on('ready', () => {
     createMainWindow();
 
+
     const mainMenu = Menu.buildFromTemplate(menu);
     Menu.setApplicationMenu(mainMenu);
+
+    globalShortcut.register('CmdOrCtrl+R', () => mainWindow.reload())
+    globalShortcut.register(isMac ? 'Command+Alt+I' : 'Ctrl+Shift+I', () => mainWindow.toggleDevTools())
 
     mainWindow.on('ready', () => mainWindow = null);
 });
 
 
 app.on('window-all-closed', () => {
-    if (process.platform != 'darwin') {
+    if (!isMac) {
         app.quit();
     }
 });
