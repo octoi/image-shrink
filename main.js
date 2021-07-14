@@ -6,14 +6,6 @@ const imageminMozjpeg = require('imagemin-mozjpeg')
 const imageminPngquant = require('imagemin-pngquant')
 const slash = require('slash');
 
-// import path from 'path';
-// import os from 'os';
-// import { app, BrowserWindow, Menu, ipcMain, shell } from 'electron';
-// import imagemin from 'imagemin';
-// import imageminMozjpeg from 'imagemin-mozjpeg';
-// import imageminPngquant from 'imagemin-pngquant';
-// import slash from 'slash';
-
 process.env.NODE_ENV = 'development';
 
 const isDev = process.env.NODE_ENV == 'development';
@@ -54,10 +46,11 @@ const shrinkImage = async ({ imgPath, quality, dest }) => {
             ]
         });
 
-        console.log(files);
         shell.openPath(dest);
-    } catch (err) {
 
+        mainWindow.webContents.send('image:done');
+    } catch (err) {
+        mainWindow.webContents.send('image:failed');
     }
 }
 
