@@ -53,6 +53,7 @@
     <script>
         const path = require('path');
         const os = require('os');
+        const { ipcRenderer } = require('electron');
 
         document.getElementById('output-path').innerHTML = path.join(os.homedir(), 'imageshrink');
 
@@ -66,7 +67,7 @@
             const imgPath = img.files[0].path;
             const quality = slider.value;
 
-
+            ipcRenderer.send('image:minimize', { imgPath, quality });
         });
     </script>
 

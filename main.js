@@ -1,4 +1,18 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const path = require('path');
+const os = require('os');
+const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron');
+const imagemin = require('imagemin')
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const imageminPngquant = require('imagemin-pngquant')
+const slash = require('slash');
+
+// import path from 'path';
+// import os from 'os';
+// import { app, BrowserWindow, Menu, ipcMain, shell } from 'electron';
+// import imagemin from 'imagemin';
+// import imageminMozjpeg from 'imagemin-mozjpeg';
+// import imageminPngquant from 'imagemin-pngquant';
+// import slash from 'slash';
 
 process.env.NODE_ENV = 'development';
 
@@ -28,6 +42,29 @@ const createMainWindow = () => {
     mainWindow.loadFile('./app/index.html');
 }
 
+const shrinkImage = async ({ imgPath, quality, dest }) => {
+    try {
+        const pngQuality = quality / 100;
+
+        const files = await imagemin([slash(imgPath)], {
+            destination: dest,
+            plugins: [
+                imageminMozjpeg({ quality }),
+                imageminPngquant({ quality: [pngQuality, pngQuality] }),
+            ]
+        });
+
+        console.log(files);
+        shell.openPath(dest);
+    } catch (err) {
+
+    }
+}
+
+ipcMain.on('image:minimize', (e, options) => {
+    options.dest = path.join(os.homedir(), 'imageshrink');
+    shrinkImage(options);
+});
 
 const menu = [
     ...(!isDev ? [] : [
@@ -42,6 +79,7 @@ const menu = [
         },
     ])
 ]
+
 
 app.on('ready', () => {
     createMainWindow();

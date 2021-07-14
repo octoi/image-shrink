@@ -12,5 +12,11 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^13.1.6"
+  },
+  "dependencies": {
+    "imagemin": "^7.0.1",
+    "imagemin-mozjpeg": "^8.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "slash": "^3.0.0"
   }
 }
